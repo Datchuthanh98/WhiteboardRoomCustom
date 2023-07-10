@@ -35,7 +35,7 @@ const io = socketIO(server, {
       "Access-Control-Allow-Origin":
         (req.header && req.header.origin) || "https://excalidraw.com",
       "Access-Control-Allow-Credentials": true,
-    };
+    };  
     res.writeHead(200, headers);
     res.end();
   },
