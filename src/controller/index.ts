@@ -33,16 +33,14 @@ export const ImgController = {
                 let url: string = img.url;
                 fs.readFile(url, (err: any, data: any) => {
                     if (err) {
-                        console.log("ERROR READ PATH FILE")
                         return res.status(500).json({
                             message: "Server error: Error reading file",
                             error: err,
                         });
                     }
 
-                    console.log("START BUFFERR")
                     const buffer = Buffer.from(data);
-                    return res.send(buffer)
+                    return res.send(data)
                 });
             } else {
                 return res.status(404).json({
