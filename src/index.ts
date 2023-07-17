@@ -1,4 +1,3 @@
-
 import debug from "debug";
 import express from "express";
 import http from "http";
@@ -11,7 +10,8 @@ import cors from "cors";
 const serverDebug = debug("server");
 const ioDebug = debug("io");
 const socketDebug = debug("socket");
-const url = "mongodb://room:aaaa1234@localhost:27017/room?maxPoolSize=20&w=majority";
+const url =
+  "mongodb://root:abcd1234@localhost:27020/test_db?maxPoolSize=20&w=majority";
 const connectDB = async () => {
   try {
     await mongoose.connect(url);
@@ -32,7 +32,7 @@ const port =
   process.env.PORT || (process.env.NODE_ENV !== "development" ? 80 : 3002); // default port to listen
 app.use(express.static("public"));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use("/api/v1/images", ImgRouter);
 app.use(
   "/images/view",
