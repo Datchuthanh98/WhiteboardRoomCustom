@@ -99,6 +99,7 @@ try {
     );
 
     socket.on("disconnecting", async () => {
+      console.log(`${socket.id} has disconnected`)
       socketDebug(`${socket.id} has disconnected`);
       for (const roomID in socket.rooms) {
         const otherClients = (await io.in(roomID).fetchSockets()).filter(
@@ -115,6 +116,8 @@ try {
     });
 
     socket.on("disconnect", () => {
+      console.log(`${socket.id} disconnect`)
+      socketDebug(`${socket.id} disconnect`);
       socket.removeAllListeners();
       socket.disconnect();
     });

@@ -12,7 +12,7 @@ export const ImgController = {
     upload: async (req: any, res: Response) => {
         try {
             const idField = req.query.idField
-            // console.log(req.files["images"]);
+            const idRoom = req.query.idRoom
             await Img.create({ url: req.files["image"][0].path, idField: idField });
             return res.status(200).json({
                 message: "Thành công",
@@ -27,8 +27,9 @@ export const ImgController = {
     getImg: async (req: Request, res: Response) => {
         try {
             const idField = req.query.idField
+            const idRoom = req.query.idRoom
             const img: Image | null = await Img.findOne({ idField: idField });
-            console.log(img);
+            // console.log(img);
             if (img?.url !== undefined && img !== null) {
                 let url: string = img.url;
                 fs.readFile(url, (err: any, data: any) => {
