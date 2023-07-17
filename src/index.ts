@@ -107,6 +107,8 @@ try {
           (_socket) => _socket.id !== socket.id,
         );
 
+        console.log("disconnecting ", otherClients.length)
+
         if (otherClients.length > 0) {
           socket.broadcast.to(roomID).emit(
             "room-user-change",
