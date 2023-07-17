@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import ImgRouter from "./route/index";
 import path from "path";
 import cors from "cors";
+import ImgController from "./controller/index";
 
 const serverDebug = debug("server");
 const ioDebug = debug("io");
@@ -99,24 +100,31 @@ try {
     );
 
     socket.on("disconnecting", async () => {
-      console.log(`${socket.id} has disconnected`)
+      console.log(`${socket.id} has disconnected`);
       socketDebug(`${socket.id} has disconnected`);
-      for (const roomID in socket.rooms) {
+      const roomIDs = [...socket.rooms];
+      // console.log("roomID:", roomIDs);
+      for (let i = 1; i < roomIDs.length; i++) {
+        const roomID = roomIDs[i];
         const otherClients = (await io.in(roomID).fetchSockets()).filter(
           (_socket) => _socket.id !== socket.id,
         );
-
         if (otherClients.length > 0) {
+          // console.log(`Room ${roomID} still running`);
           socket.broadcast.to(roomID).emit(
             "room-user-change",
             otherClients.map((socket) => socket.id),
           );
         }
+        if (otherClients.length === 0) {
+          console.log(`Room ${roomID} is closed`);
+          ImgController.deleteRoom(roomID);
+        }
       }
     });
 
     socket.on("disconnect", () => {
-      console.log(`${socket.id} disconnect`)
+      console.log(`${socket.id} disconnect`);
       socketDebug(`${socket.id} disconnect`);
       socket.removeAllListeners();
       socket.disconnect();

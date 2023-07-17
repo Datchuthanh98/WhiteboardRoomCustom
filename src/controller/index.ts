@@ -65,6 +65,30 @@ export const ImgController = {
       });
     }
   },
+  deleteRoom: async (roomID: string) => {
+    try {
+      const fs = require("fs-extra");
+      const path = require("path");
+      const folderPath = path.join(__dirname, "../public/upload", roomID);
+      if (fs.existsSync(folderPath)) {
+        fs.removeSync(folderPath);
+        console.log("Folder and its contents deleted successfully");
+      } else {
+        console.log("Folder does not exist");
+      }
+      let img: Image | null = null;
+      while (true) {
+        img = await Img.findOneAndDelete({
+          idRoom: roomID,
+        });
+        if (img === null) {
+          break;
+        }
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  },
 };
 
 export default ImgController;
