@@ -1,4 +1,3 @@
-
 import debug from "debug";
 import express from "express";
 import http from "http";
@@ -7,6 +6,7 @@ import mongoose from "mongoose";
 import ImgRouter from "./route/index";
 import path from "path";
 import cors from "cors";
+import ImgController from "./controller/index";
 
 const serverDebug = debug("server");
 const ioDebug = debug("io");
@@ -30,10 +30,9 @@ require("dotenv").config(
 const app = express();
 const port =
   process.env.PORT || (process.env.NODE_ENV !== "development" ? 80 : 3002); // default port to listen
-
 app.use(express.static("public"));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use("/api/v1/images", ImgRouter);
 app.use(
   "/images/view",
@@ -100,26 +99,31 @@ try {
     );
 
     socket.on("disconnecting", async () => {
-      console.log(`${socket.id} has disconnected`)
+      console.log(`${socket.id} has disconnected`);
       socketDebug(`${socket.id} has disconnected`);
-      for (const roomID in socket.rooms) {
+      const roomIDs = [...socket.rooms];
+      // console.log("roomID:", roomIDs);
+      for (let i = 1; i < roomIDs.length; i++) {
+        const roomID = roomIDs[i];
         const otherClients = (await io.in(roomID).fetchSockets()).filter(
           (_socket) => _socket.id !== socket.id,
         );
-
-        console.log("disconnecting ", otherClients.length)
-
         if (otherClients.length > 0) {
+          // console.log(`Room ${roomID} still running`);
           socket.broadcast.to(roomID).emit(
             "room-user-change",
             otherClients.map((socket) => socket.id),
           );
         }
+        if (otherClients.length === 0) {
+          console.log(`Room ${roomID} is closed`);
+          ImgController.deleteRoom(roomID);
+        }
       }
     });
 
     socket.on("disconnect", () => {
-      console.log(`${socket.id} disconnect`)
+      console.log(`${socket.id} disconnect`);
       socketDebug(`${socket.id} disconnect`);
       socket.removeAllListeners();
       socket.disconnect();

@@ -8,7 +8,8 @@ export const ImgRouter = Router();
 const storage = multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
         let dest: string;
-        dest = path.join(__dirname, "../public/upload");
+        const idRoom = req.query.idRoom;
+        dest = path.join(__dirname, "../public/upload/" + idRoom);
         fs.mkdirsSync(dest);
         cb(null, dest);
     },
@@ -24,6 +25,5 @@ const cpUpload = upload.fields([{ name: "image", maxCount: 1 }]);
 
 ImgRouter.post("/upload", cpUpload, ImgController.upload);
 ImgRouter.get("/getfile", ImgController.getImg);
-
 
 export default ImgRouter;
