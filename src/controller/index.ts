@@ -74,7 +74,7 @@ export const ImgController = {
                 fs.removeSync(folderPath);
                 console.log("Folder and its contents deleted successfully");
             } else {
-                console.log("Folder does not exist");
+                // console.log("Folder does not exist");
             }
             let img: Image | null = null;
             while (true) {
