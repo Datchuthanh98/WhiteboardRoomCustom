@@ -11,7 +11,8 @@ import ImgController from "./controller/index";
 const serverDebug = debug("server");
 const ioDebug = debug("io");
 const socketDebug = debug("socket");
-const url = "mongodb://room:aaaa1234@localhost:27017/room?maxPoolSize=20&w=majority";
+const url =
+  "mongodb://root:abcd1234@localhost:27020/test_db?maxPoolSize=20&w=majority";
 const connectDB = async () => {
   try {
     await mongoose.connect(url);
@@ -107,6 +108,7 @@ try {
           (_socket) => _socket.id !== socket.id,
         );
         if (otherClients.length > 0) {
+          // console.log(`Room ${roomID} still running`);
           socket.broadcast.to(roomID).emit(
             "room-user-change",
             otherClients.map((socket) => socket.id),
