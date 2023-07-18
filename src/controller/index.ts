@@ -13,8 +13,6 @@ export const ImgController = {
     try {
       const idField = req.query.idField;
       const idRoom = req.query.idRoom;
-      console.log("idRoom: " + idRoom);
-      console.log("idField: " + idField);
       // console.log(req.files["images"]);
       await Img.create({
         url: req.files["image"][0].path,
@@ -39,7 +37,6 @@ export const ImgController = {
         idField: idField,
         idRoom: idRoom,
       });
-      console.log(img);
       if (img?.url !== undefined && img !== null) {
         let url: string = img.url;
         fs.readFile(url, (err: any, data: any) => {

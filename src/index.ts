@@ -7,12 +7,11 @@ import ImgRouter from "./route/index";
 import path from "path";
 import cors from "cors";
 import ImgController from "./controller/index";
-
+import 'dotenv/config';
 const serverDebug = debug("server");
 const ioDebug = debug("io");
 const socketDebug = debug("socket");
-const url =
-  "mongodb://root:abcd1234@localhost:27020/test_db?maxPoolSize=20&w=majority";
+const url = String(process.env.URL_MONGO);
 const connectDB = async () => {
   try {
     await mongoose.connect(url);
@@ -30,7 +29,7 @@ require("dotenv").config(
 
 const app = express();
 const port =
-  process.env.PORT || (process.env.NODE_ENV !== "development" ? 80 : 3002); // default port to listen
+  process.env.PORT || (process.env.NODE_ENV !== "development" ? 80 : 3101); // default port to listen
 app.use(express.static("public"));
 app.use(express.json());
 app.use(cors());
@@ -108,14 +107,13 @@ try {
           (_socket) => _socket.id !== socket.id,
         );
         if (otherClients.length > 0) {
-          // console.log(`Room ${roomID} still running`);
           socket.broadcast.to(roomID).emit(
             "room-user-change",
             otherClients.map((socket) => socket.id),
           );
         }
         if (otherClients.length === 0) {
-          console.log(`Session ${roomID} is closed`);
+          // console.log(`Session ${roomID} is closed`);
           ImgController.deleteRoom(roomID);
         }
       }
