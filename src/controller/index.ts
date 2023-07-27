@@ -9,6 +9,7 @@ interface Image {
 }
 
 export const ImgController = {
+
   upload: async (req: any, res: Response) => {
     try {
       const idField = req.query.idField;

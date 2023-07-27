@@ -1,28 +1,13 @@
 version: "3.8"
 
 services:
-  # whiteboard_server:
-  #   image: "meeting/whiteboard-server"
-  #   ports:
-  #     - "3101:3101"
-  #   environment:
-  #     - "URL_MONGO=mongodb://room:aaaa1234@172.24.106.203:27017/room?maxPoolSize=20&w=majority"
-  #     - "PORT=3101"
-
-  whiteboard_client:
-    image: "meetdev/whiteboard-client"
+  whiteboard_server:
+    image: "meeting/whiteboard-server"
     ports:
-      - "80:80"
-    restart: on-failure
+      - "3101:3101"
     environment:
-      - "REACT_APP_BACKEND_V2_GET_URL=https://json-dev.excalidraw.com/api/v2/"
-      - "REACT_APP_BACKEND_V2_POST_URL=https://json-dev.excalidraw.com/api/v2/post/"
-      - "REACT_APP_LIBRARY_URL=https://libraries.excalidraw.com"
-      - "REACT_APP_LIBRARY_BACKEND=https://us-central1-excalidraw-room-persistence.cloudfunctions.net/libraries"
-      - "REACT_APP_WS_SERVER_URL=http://172.24.106.203:3101"
-      - "REACT_APP_ROOM_SERVER_URL=http://172.24.106.203:8000/api"
-      - "REACT_APP_DISABLE_TRACKING=true"
-      - "FAST_REFRESH=false"
+      - "URL_MONGO=mongodb://room:aaaa1234@172.24.106.203:27017/room?maxPoolSize=20&w=majority"
+      - "PORT=3101"
 
 volumes:
   notused:

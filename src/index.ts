@@ -34,6 +34,8 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(cors());
 app.use("/api/v1/images", ImgRouter);
+// app.use("/wbapi/v1/images", ImgRouter);
+// app.use("/wbapi/api/v1/images", ImgRouter);
 app.use(
   "/images/view",
   express.static(
@@ -46,11 +48,12 @@ app.get("/", (req, res) => {
 });
 const server = http.createServer(app);
 server.listen(port, () => {
-  serverDebug(`listening on port: ${port}`);
+  console.log(`listening on port: ${port}`);
 });
 
 try {
   const io = new SocketIO(server, {
+    path: "/wbsocket/",
     transports: ["websocket", "polling"],
     cors: {
       allowedHeaders: ["Content-Type", "Authorization"],
@@ -61,7 +64,8 @@ try {
   });
 
   io.on("connection", (socket) => {
-    ioDebug("connection established!");
+    console.log("new connection established!")
+    ioDebug("new connection established!");
     io.to(`${socket.id}`).emit("init-room");
     socket.on("join-room", async (roomID) => {
       socketDebug(`${socket.id} has joined ${roomID}`);
