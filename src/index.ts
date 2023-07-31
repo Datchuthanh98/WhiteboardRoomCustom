@@ -34,8 +34,8 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(cors());
 app.use("/api/v1/images", ImgRouter);
-// app.use("/wbapi/v1/images", ImgRouter);
-// app.use("/wbapi/api/v1/images", ImgRouter);
+app.use("/wbapi/v1/images", ImgRouter);
+app.use("/wbapi/api/v1/images", ImgRouter);
 app.use(
   "/images/view",
   express.static(
