@@ -111,10 +111,10 @@ try {
           (_socket) => _socket.id !== socket.id,
         );
         if (otherClients.length > 0) {
-          socket.broadcast.to(roomID).emit(
-            "room-user-change",
-            otherClients.map((socket) => socket.id),
-          );
+          // socket.broadcast.to(roomID).emit(
+          //   "room-user-change",
+          //   otherClients.map((socket) => socket.id),
+          // );
         }
         if (otherClients.length === 0) {
           // console.log(`Session ${roomID} is closed`);
